@@ -1,4 +1,3 @@
-
 import { Element } from "@/types/element";
 
 export const elements: Element[] = [
