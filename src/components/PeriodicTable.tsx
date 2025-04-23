@@ -2,13 +2,19 @@
 import { Element, getCategoryColor } from "@/types/element";
 import ElementCell from "./ElementCell";
 import ElementLegend from "./ElementLegend";
+import { getLanthanides, getActinides } from "@/data/allElements";
 
 interface PeriodicTableProps {
   elements: Element[];
   onElementClick: (element: Element) => void;
+  showLanthanideActinides?: boolean;
 }
 
-const PeriodicTable = ({ elements, onElementClick }: PeriodicTableProps) => {
+const PeriodicTable = ({ 
+  elements, 
+  onElementClick,
+  showLanthanideActinides = true
+}: PeriodicTableProps) => {
   // Create a 2D array representing the table
   const rows = 10; // Main table rows
   const cols = 18; // Main table columns
@@ -17,7 +23,7 @@ const PeriodicTable = ({ elements, onElementClick }: PeriodicTableProps) => {
     .fill(null)
     .map(() => Array(cols).fill(null));
   
-  // Place elements in the table
+  // Place elements in the table according to their positions
   elements.forEach(element => {
     if (element.ypos <= rows && element.xpos <= cols) {
       table[element.ypos - 1][element.xpos - 1] = element;
@@ -25,8 +31,8 @@ const PeriodicTable = ({ elements, onElementClick }: PeriodicTableProps) => {
   });
   
   // Get lanthanides and actinides
-  const lanthanides = elements.filter(e => e.category === "lanthanide");
-  const actinides = elements.filter(e => e.category === "actinide");
+  const lanthanides = getLanthanides().filter(e => elements.some(el => el.number === e.number));
+  const actinides = getActinides().filter(e => elements.some(el => el.number === e.number));
 
   return (
     <div className="pb-4">
@@ -56,32 +62,40 @@ const PeriodicTable = ({ elements, onElementClick }: PeriodicTableProps) => {
           )}
         </div>
         
-        {/* Spacer */}
-        <div className="h-4"></div>
-        
-        {/* Lanthanides row */}
-        <div className="grid" style={{ gridTemplateColumns: 'repeat(15, minmax(60px, 1fr))', gridColumnStart: '4' }}>
-          {lanthanides.map((element) => (
-            <ElementCell 
-              key={element.number} 
-              element={element} 
-              onClick={() => onElementClick(element)}
-              colorClass={getCategoryColor(element.category)}
-            />
-          ))}
-        </div>
-        
-        {/* Actinides row */}
-        <div className="grid" style={{ gridTemplateColumns: 'repeat(15, minmax(60px, 1fr))', gridColumnStart: '4' }}>
-          {actinides.map((element) => (
-            <ElementCell 
-              key={element.number} 
-              element={element} 
-              onClick={() => onElementClick(element)}
-              colorClass={getCategoryColor(element.category)}
-            />
-          ))}
-        </div>
+        {showLanthanideActinides && (
+          <>
+            {/* Spacer */}
+            <div className="h-4"></div>
+            
+            {/* Lanthanides row */}
+            {lanthanides.length > 0 && (
+              <div className="grid mb-2" style={{ gridTemplateColumns: 'repeat(15, minmax(60px, 1fr))', gridColumnStart: '4' }}>
+                {lanthanides.map((element) => (
+                  <ElementCell 
+                    key={element.number} 
+                    element={element} 
+                    onClick={() => onElementClick(element)}
+                    colorClass={getCategoryColor(element.category)}
+                  />
+                ))}
+              </div>
+            )}
+            
+            {/* Actinides row */}
+            {actinides.length > 0 && (
+              <div className="grid" style={{ gridTemplateColumns: 'repeat(15, minmax(60px, 1fr))', gridColumnStart: '4' }}>
+                {actinides.map((element) => (
+                  <ElementCell 
+                    key={element.number} 
+                    element={element} 
+                    onClick={() => onElementClick(element)}
+                    colorClass={getCategoryColor(element.category)}
+                  />
+                ))}
+              </div>
+            )}
+          </>
+        )}
       </div>
     </div>
   );

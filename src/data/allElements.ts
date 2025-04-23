@@ -10,6 +10,7 @@ import { period7Elements } from "./elements/period7";
 import { lanthanideElements } from "./elements/lanthanides";
 import { actinideElements } from "./elements/actinides";
 
+// Combine all elements into a single array
 export const allElements: Element[] = [
   ...period1Elements,
   ...period2Elements,
@@ -17,33 +18,42 @@ export const allElements: Element[] = [
   ...period4Elements,
   ...period5Elements,
   ...period6Elements,
-  ...period7Elements
+  ...period7Elements,
+  ...lanthanideElements,
+  ...actinideElements
 ];
 
+// Function to get lanthanides
 export const getLanthanides = (): Element[] => {
   return lanthanideElements;
 };
 
+// Function to get actinides
 export const getActinides = (): Element[] => {
   return actinideElements;
 };
 
+// Get element by ID (atomic number)
 export const getElementById = (id: number): Element | undefined => {
   return allElements.find(element => element.number === id);
 };
 
+// Get elements by period number
 export const getElementsByPeriod = (period: number): Element[] => {
   return allElements.filter(element => element.period === period);
 };
 
+// Get elements by category (e.g., "noble-gas", "alkali-metal")
 export const getElementsByCategory = (category: string): Element[] => {
   return allElements.filter(element => element.category === category);
 };
 
+// Get elements by block (s, p, d, f)
 export const getElementsByBlock = (block: string): Element[] => {
   return allElements.filter(element => element.block === block);
 };
 
+// Get elements by phase (Solid, Liquid, Gas)
 export const getElementsByPhase = (phase: string): Element[] => {
   return allElements.filter(element => element.phase === phase);
 };
