@@ -3,7 +3,7 @@ import { useState } from "react";
 import PeriodicTable from "@/components/PeriodicTable";
 import ElementDetails from "@/components/ElementDetails";
 import { Element } from "@/types/element";
-import { elements } from "@/data/periodicElements";
+import { allElements } from "@/data/allElements";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
@@ -13,12 +13,12 @@ const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
   
   const filteredElements = searchQuery 
-    ? elements.filter(element => 
+    ? allElements.filter(element => 
         element.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
         element.symbol.toLowerCase().includes(searchQuery.toLowerCase()) ||
         element.number.toString().includes(searchQuery)
       )
-    : elements;
+    : allElements;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 to-indigo-950 text-white">
